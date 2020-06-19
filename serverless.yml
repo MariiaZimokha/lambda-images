@@ -1,0 +1,27 @@
+service: lambda-image
+
+provider:
+ name: aws
+ runtime: nodejs12.x
+ memorySize: 128
+ timeout: 10
+ stage: production
+ region: us-east-1
+
+functions:
+ api:
+   handler: lambda.universal
+   events:
+     - http: ANY {proxy+}
+     - http: ANY /
+
+
+plugins:
+ - serverless-apigw-binary
+
+custom:
+  apigwBinary:
+    types:           #list of mime-types
+      - 'image/jpeg'
+      - 'image/jpg'
+      - 'text/html'
